@@ -65,9 +65,16 @@ app.get("/users", function (req, res) {
     const username = decoded.username;
     // return a list of users other than this username
     res.json({
-        usersDetails: ALL_USERS
+        usersDetails: ALL_USERS.filter(function(value){
+          if(value.username == username){
+            return false;
+          } else {
+            return true;
+          }
+        })
     })
-  } catch (err) {
+  } 
+  catch (err) {
     return res.status(403).json({
       msg: "Invalid token",
     });
