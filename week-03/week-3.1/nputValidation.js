@@ -1,34 +1,33 @@
 // input validation
 // read zod documentation , read about coercing
 
-const express = require("express");
-const zod = require("zod")
-const app = express();
+// const express = require("express");
+// const zod = require("zod")
+// const app = express();
 
-const schema = zod.array(zod.number())
+// const schema = zod.array(zod.number())
 
-app.use(express.json());
+// app.use(express.json());
 
-app.post('/health-checkup', function(req, res){
-    const kidneys = req.body.kidneys;
-    const response = schema.safeParse(kidneys);
+// app.post('/health-checkup', function(req, res){
+//     const kidneys = req.body.kidneys;
+//     const response = schema.safeParse(kidneys);
 
-    if( !response.success ){
-        res.status(411).json({
-            msg: "input is invalid"
-        })
-    }
-    else{
-        res.send({response});
-    }  
-});
+//     if( !response.success ){
+//         res.status(411).json({
+//             msg: "input is invalid"
+//         })
+//     }
+//     else{
+//         res.send({response});
+//     }  
+// });
 
-app.listen(3000, function(){
-    console.log("running");
-});
+// app.listen(3000, function(){
+//     console.log("running");
+// });
 
 //----------------------------------------
-
 
 
 const z = require("zod")
@@ -66,16 +65,16 @@ validateTwo({
     password: "M@nish123",
 })
 
-app.post('/login', function(req, res){
-    const input = req.body;
-    const response = validateTwo(input);
+// app.post('/login', function(req, res){
+//     const input = req.body;
+//     const response = validateTwo(input);
 
-    if( !response.success ) {
-        res.json({
-            msg: "invalid input"
-        })
-        return;
-    }
-})
+//     if( !response.success ) {
+//         res.json({
+//             msg: "invalid input"
+//         })
+//         return;
+//     }
+// })
 
 

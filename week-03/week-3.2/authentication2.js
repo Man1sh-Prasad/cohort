@@ -16,8 +16,18 @@ const User = mongoose.model("User", {
 const app = express();
 app.use(express.json());
 
-function userExists(username, password) {
-  // should check in the database
+// function userExists(username, password) {
+//   // should check in the database
+
+// }
+async function userExists(username, password) {
+  const user = await User.findOne({ username, password });
+  return user !== null;
+}
+
+async function getUsersExcept(username) {
+  const users = await User.find({ username: { $ne: username } });
+  return users;
 }
 
 app.post("/signin", async function (req, res) {
@@ -30,18 +40,23 @@ app.post("/signin", async function (req, res) {
     });
   }
 
-  var token = jwt.sign({ username: username }, "shhhhh");
+  var token = jwt.sign({ username: username }, jwtPassword);
   return res.json({
     token,
   });
 });
 
 app.get("/users", function (req, res) {
-  const token = req.headers.authorization;
+  const token = req.headers.authorization
   try {
     const decoded = jwt.verify(token, jwtPassword);
     const username = decoded.username;
     // return a list of users other than this username from the database
+    getUsersExcept(username).then((users) => {
+      return res.json({
+        users,
+      });
+    });
   } catch (err) {
     return res.status(403).json({
       msg: "Invalid token",

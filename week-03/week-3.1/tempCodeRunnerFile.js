@@ -1,24 +1,25 @@
+const express = require("express");
+// const zod = require("zod")
+// const app = express();
 
+// const schema = zod.array(zod.number())
 
-// using the middleware i.e (userMiddleware, kidneyMiddleware)
-app.get('/health-checkup', userMiddleware, kidneyMiddleware, function(req, res){
-    //do check up
+// app.use(express.json());
 
-    res.send("you are healthy");
-})
+// app.post('/health-checkup', function(req, res){
+//     const kidneys = req.body.kidneys;
+//     const response = schema.safeParse(kidneys);
 
-app.get('/kidney-check', userMiddleware, kidneyMiddleware, function(req, res, next){
-    // do something with your kidney
+//     if( !response.success ){
+//         res.status(411).json({
+//             msg: "input is invalid"
+//         })
+//     }
+//     else{
+//         res.send({response});
+//     }  
+// });
 
-    res.send("your kidney is healthy")
-})
-
-app.get('/heart-checkup', userMiddleware, function(req, res, next){
-    // do your heart checkup 
-
-    res.send('your heart is healthy')
-})
-
-app.listen(3000, function(){
-    console.log("running")
-})
+// app.listen(3000, function(){
+//     console.log("running");
+// });
