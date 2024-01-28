@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="list">
+        <h2 class="title">Items</h2>
+        <ul class="items">
+            <li class="items">item 1</li>
+            <li class="items">item 2</li>
+            <li class="items">item 3</li>
+        </ul>
+        <p>hello there</p>
+    </div>
+
+    <script type="text/JavaScript">
+        const ul = document.querySelector(".items");
+
+        // parentNode
+        console.log(ul.parentNode);
+        ul.parentNode.style.backgroundColor = "red"
+
+        // childNode
+        console.log(ul.children[0]);
+
+        // sibling
+        console.log(ul.previousElementSibling)
+
+    </script>
+</body>
+</html>

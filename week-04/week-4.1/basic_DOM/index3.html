@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>anchor html</title>
+</head>
+<body>
+
+    <a name="html">html tutorial</a>
+    <a name="css">css tutorial</a>
+    <a name="xml"> xml tutorial</a>
+
+    <p id="demo"></p>
+    
+    <p id="demo2"></p>
+
+    <p id="demo3"></p>
+
+    <script>
+        document.getElementById("demo").innerHTML = `numbers of anchor element is ${document.anchors.length}`;
+
+        document.getElementById("demo2").innerHTML = document.body.innerHTML;
+
+        document.getElementById("demo3").innerHTML = document.documentElement.innerHTML // erase .innerHTML and see the output
+    </script>
+    
+</body>
+</html>

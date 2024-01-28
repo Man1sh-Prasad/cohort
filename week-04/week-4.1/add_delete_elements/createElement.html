@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>press the button to create an element</p>
+    <button onclick="myfunn()">click me</button>
+    <div class="myDiv"></div>
+
+    <script>
+        function myfunn(){
+            const para = document.createElement("p");
+            para.innerHTML = "hello there";
+
+            // appendchild
+            document.getElementsByClassName("myDiv")[0].appendChild(para);
+        }
+            /// problem faced 
+            /*
+             There is a small mistake in your JavaScript code. The method is getElementsByClassName, not //getElementByClassName. Also, it returns a collection of elements, not a single element. In this case, you can use getElementsByClassName("myDiv")[0] to get the first element with the class "myDiv". Here's the corrected code:
+*/   </script>
+</body>
+</html>
