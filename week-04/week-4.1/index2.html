@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <input type="text" id="principal" placeholder="enter principal"><br><br>
+
+    <input type="text" id="rate" placeholder="enter rate (between 1 to 100)"><br><br>
+
+    <input type="text" id="time" placeholder="time (in years)"> <br><br>
+
+    <div id="result" ></div>
+
+    <button id="calculate-btn" onclick="populateDiv()">calculate</button>
+
+    <script>
+        async function populateDiv() {
+            console.log("working")
+            const principal = document.getElementById("principal").value;
+            const rate = document.getElementById("rate").value;
+            const time = document.getElementById("time").value;
+
+            const response = await fetch("https://sum-server.100xdevs.com/interest?principal=" + principal+ "&rate=" + rate + "&time=" + time );
+            console.log(response);
+            const ans = await response.json();
+            console.log( ans)
+            document.getElementById('result').innerHTML = JSON.stringify(ans);
+            
+        }
+
+        
+    </script>
+    
+</body>
+</html>
