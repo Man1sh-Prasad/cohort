@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+</head>
+
+    <body>
+      <input type="text" id="title" placeholder="Todo title"></input> <br /><br />
+      <input type="text" id="description" placeholder="Todo description"></input> <br /><br />
+    
+      <div id="container"></div>
+
+    </body>
+    <script>
+        let globalId = 1;
+    
+        function markAsDone(todoId) {
+          const parent = document.getElementById(todoId);
+        //   console.log(parent)
+          parent.children[2].innerHTML = "Done!"
+        }
+    
+        function createChild(title, description, id) {
+          const child = document.createElement("div");
+          const firstGrandChild = document.createElement("div");
+          firstGrandChild.innerHTML = title;
+          const secondGrandChild = document.createElement("div");
+          secondGrandChild.innerHTML = description;
+          const thirdGrandChild = document.createElement("button");
+          thirdGrandChild.innerHTML = "Mark as done";
+          thirdGrandChild.setAttribute("onclick", `markAsDone(${id})`);
+          child.appendChild(firstGrandChild);
+          child.appendChild(secondGrandChild);
+          child.appendChild(thirdGrandChild)
+          child.setAttribute("id", id);
+        //   console.log(child)
+          return child;
+        }
+
+        function updateDomAccToState(state) {
+          const parent = document.getElementById("container");
+          parent.innerHTML = "";
+          for( let i=0; i<state.length; i++) {
+            const child = createChild(state[i].title, state[i].description, state[i].id);
+            parent.appendChild(child);
+          }
+        }
+
+        // window.setInterval(async function() {
+        //     const res = await fetch("https://sum-server.100xdevs.com/todos");
+        //     json = await res.json();
+        //     updateDomAccToState(json.todos);
+        
+        // }, 5000);
+
+      </script>
+ 
+</html>
