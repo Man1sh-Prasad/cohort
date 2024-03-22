@@ -17,7 +17,7 @@ export function CreateTodo() {
         })
         .then(async function(res) {
             if (res.ok) {
-                const json = await res.json();
+                // 
                 alert("Todo Added");
                 // Clear input fields after adding todo
                 setTitle("");
@@ -42,5 +42,5 @@ export function CreateTodo() {
 
             <button onClick={handleAddTodo}>Add Todo</button>
         </div>
-    );
+    ); 
 }

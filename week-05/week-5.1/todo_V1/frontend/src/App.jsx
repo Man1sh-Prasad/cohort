@@ -9,7 +9,7 @@ function App() {
   fetch("http://localhost:3000/todos")    // wrong way to use fetch, better way - useEffect
     .then(async function(res) {
       const json = await res.json();
-      setTodos(json.allTodos);
+      setTodos(json.allTodos);    
     })
 
   return (
