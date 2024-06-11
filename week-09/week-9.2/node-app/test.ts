@@ -31,10 +31,25 @@
 
 // ----- create a function that takes another function as an input and runs it after n sec
 
-function runAfter1S(func: () => void) {           // void because it returns nothing
-    setTimeout(func, 5000)
-}
+// function runAfter1S(func: () => void) {           // void because it returns nothing
+//     setTimeout(func, 5000)
+// }
+// const fnc = (): void => {
+//     console.log('hello fnc')
+// }
 
-runAfter1S(function(){
-    console.log('hello')
-})
+// runAfter1S(function(){
+//     console.log('hello')
+// })
+// runAfter1S(fnc)
+
+// function callAfter1S(cb: () => number) {
+//     setTimeout(cb, 4000)
+// }
+
+// callAfter1S(() => {
+//     console.log("hello")
+//     return 5
+// })
+
+
