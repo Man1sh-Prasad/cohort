@@ -121,39 +121,85 @@ const pg_1 = require("pg");
 // insertAddress('1', 'Bargarh', 'India', '13', '768028')
 // ----------------------------
 // TRANSACTION IN SQL 
-function insertUserAndAddress(username, email, password, city, country, street, pincode) {
+// async function insertUserAndAddress(
+//     username: string,
+//     email: string,
+//     password: string,
+//     city: string,
+//     country: string,
+//     street: string,
+//     pincode: string
+// ) {
+//     const client = new Client({
+//         connectionString: 'postgresql://prasadmanish467:5DBtV2xMzPYK@ep-fragrant-truth-a505vjqm.us-east-2.aws.neon.tech/testdb?sslmode=require'
+//     })
+//     try {
+//         await client.connect()
+//         // start transcation 
+//         await client.query('BEGIN')
+//         // INSERT USER 
+//         const insertUserText = `
+//         INSERT INTO users (username, email, password)
+//         VALUES ($1, $2, $3)
+//         RETURNING id`
+//         const userResponse = await client.query(insertUserText, [username, email, password])
+//         const userId = userResponse.rows[0].id
+//         // insert address using the returned id
+//         const insertAddressText = `
+//         INSERT INTO addresses (user_id, city, country, street, pincode) VALUES ($1, $2, $3, $4, $5)`
+//         await client.query(insertAddressText, [userId, city, country, street, pincode])
+//         // commit transaction 
+//         await client.query('COMMIT')
+//         console.log('user and address successfully inserted in db')
+//     } catch(err) {
+//         // rollback the transaction on error
+//         await client.query('ROLLBACK')
+//         console.error('Error during transaction, rolled back', err)
+//         throw err
+//     } finally {
+//         await client.end() // close the client connection
+//     }
+// }
+// insertUserAndAddress(
+//     'rohon',
+//     'rohan@gmail.com',
+//     'rohan@123',
+//     'Bargarh',
+//     'India',
+//     '13',
+//     '768028'
+// )
+//_____________________________________________________-
+// Joins in sql
+function getUserDetailsWithAddress(userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const client = new pg_1.Client({
-            connectionString: 'postgresql://prasadmanish467:5DBtV2xMzPYK@ep-fragrant-truth-a505vjqm.us-east-2.aws.neon.tech/testdb?sslmode=require'
+            connectionString: "postgresql://prasadmanish467:5DBtV2xMzPYK@ep-fragrant-truth-a505vjqm.us-east-2.aws.neon.tech/testdb?sslmode=require"
         });
         try {
             yield client.connect();
-            // start transcation 
-            yield client.query('BEGIN');
-            // INSERT USER 
-            const insertUserText = `
-        INSERT INTO users (username, email, password)
-        VALUES ($1, $2, $3)
-        RETURNING id`;
-            const userResponse = yield client.query(insertUserText, [username, email, password]);
-            const userId = userResponse.rows[0].id;
-            // insert address using the returned id
-            const insertAddressText = `
-        INSERT INTO addresses (user_id, city, country, street, pincode) VALUES ($1, $2, $3, $4, $5)`;
-            yield client.query(insertAddressText, [userId, city, country, street, pincode]);
-            // commit transaction 
-            yield client.query('COMMIT');
-            console.log('user and address successfully inserted in db');
+            const query = `
+        SELECT u.id, u.username, u.email, a.city, a.country, a.street, a.pincode
+        FROM users u
+        JOIN addresses a ON u.id = a.user_id
+        WHERE u.id = $1`;
+            const result = yield client.query(query, [userId]);
+            if (result.rows.length > 0) {
+                console.log('User and Address found: ', result.rows[0]);
+                return result.rows[0];
+            }
+            else {
+                console.log('No user or address found with the given ID');
+                return null;
+            }
         }
         catch (err) {
-            // rollback the transaction on error
-            yield client.query('ROLLBACK');
-            console.error('Error during transaction, rolled back', err);
+            console.error('Error during fetching data: ', err);
             throw err;
         }
         finally {
-            yield client.end(); // close the client connection
+            yield client.end();
         }
     });
 }
-insertUserAndAddress('rohon', 'rohan@gmail.com', 'rohan@123', 'Bargarh', 'India', '13', '768028');
+getUserDetailsWithAddress("2");
