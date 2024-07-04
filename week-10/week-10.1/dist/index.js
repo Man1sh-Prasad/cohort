@@ -48,7 +48,7 @@ const pg_1 = require("pg");
 // }
 // insertData('manish', 'manish@gmail.com', 'manish123')
 // _________________________________________________________-
-// async function to fetch user data from the database given an email
+//async function to fetch user data from the database given an email
 // async function getUser(email: string) {
 //     const client = new Client({
 //         connectionString: "postgresql://prasadmanish467:5DBtV2xMzPYK@ep-fragrant-truth-a505vjqm.us-east-2.aws.neon.tech/testdb?sslmode=require"
@@ -102,24 +102,58 @@ const pg_1 = require("pg");
 // createAddressTable();
 //________________________________________________
 // write a function to insert data in the table 
-function insertAddress(user_id, city, country, street, pincode) {
+// async function insertAddress(user_id: string, city: string, country: string, street: string, pincode: string) {
+//     const client = new Client({
+//         connectionString: "postgresql://prasadmanish467:5DBtV2xMzPYK@ep-fragrant-truth-a505vjqm.us-east-2.aws.neon.tech/testdb?sslmode=require"
+//     })
+//     try {
+//         await client.connect()
+//         const insertQuery = "INSERT INTO addresses (user_id, city, country, street, pincode) VALUES ($1, $2, $3, $4, $5)"
+//         const values = [user_id, city, country, street, pincode]
+//         const res = await client.query(insertQuery, values)
+//         console.log("insertion success: ", res)
+//     } catch (err) {
+//         console.log('Error while insertion', err)
+//     } finally {
+//         await client.end()
+//     }
+// }
+// insertAddress('1', 'Bargarh', 'India', '13', '768028')
+// ----------------------------
+// TRANSACTION IN SQL 
+function insertUserAndAddress(username, email, password, city, country, street, pincode) {
     return __awaiter(this, void 0, void 0, function* () {
         const client = new pg_1.Client({
-            connectionString: "postgresql://prasadmanish467:5DBtV2xMzPYK@ep-fragrant-truth-a505vjqm.us-east-2.aws.neon.tech/testdb?sslmode=require"
+            connectionString: 'postgresql://prasadmanish467:5DBtV2xMzPYK@ep-fragrant-truth-a505vjqm.us-east-2.aws.neon.tech/testdb?sslmode=require'
         });
         try {
             yield client.connect();
-            const insertQuery = "INSERT INTO addresses (user_id, city, country, street, pincode) VALUES ($1, $2, $3, $4, $5)";
-            const values = [user_id, city, country, street, pincode];
-            const res = yield client.query(insertQuery, values);
-            console.log("insertion success: ", res);
+            // start transcation 
+            yield client.query('BEGIN');
+            // INSERT USER 
+            const insertUserText = `
+        INSERT INTO users (username, email, password)
+        VALUES ($1, $2, $3)
+        RETURNING id`;
+            const userResponse = yield client.query(insertUserText, [username, email, password]);
+            const userId = userResponse.rows[0].id;
+            // insert address using the returned id
+            const insertAddressText = `
+        INSERT INTO addresses (user_id, city, country, street, pincode) VALUES ($1, $2, $3, $4, $5)`;
+            yield client.query(insertAddressText, [userId, city, country, street, pincode]);
+            // commit transaction 
+            yield client.query('COMMIT');
+            console.log('user and address successfully inserted in db');
         }
         catch (err) {
-            console.log('Error while insertion', err);
+            // rollback the transaction on error
+            yield client.query('ROLLBACK');
+            console.error('Error during transaction, rolled back', err);
+            throw err;
         }
         finally {
-            yield client.end();
+            yield client.end(); // close the client connection
         }
     });
 }
-insertAddress('1', 'Bargarh', 'India', '13', '768028');
+insertUserAndAddress('rohon', 'rohan@gmail.com', 'rohan@123', 'Bargarh', 'India', '13', '768028');

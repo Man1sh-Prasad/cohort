@@ -51,8 +51,7 @@ import { Client, Connection } from 'pg'
 
 // _________________________________________________________-
 
-// async function to fetch user data from the database given an email
-
+//async function to fetch user data from the database given an email
 
 // async function getUser(email: string) {
 //     const client = new Client({
@@ -79,7 +78,6 @@ import { Client, Connection } from 'pg'
 //         await client.end()  // close the client connection
 //     }
 // }
-
 // getUser('manish@gmail.com').catch(console.error)
 
 //--------------------------------------------------------------------
@@ -123,23 +121,89 @@ import { Client, Connection } from 'pg'
 
 // write a function to insert data in the table 
 
-async function insertAddress(user_id: string, city: string, country: string, street: string, pincode: string) {
-    const client = new Client({
-        connectionString: "postgresql://prasadmanish467:5DBtV2xMzPYK@ep-fragrant-truth-a505vjqm.us-east-2.aws.neon.tech/testdb?sslmode=require"
-    })
+// async function insertAddress(user_id: string, city: string, country: string, street: string, pincode: string) {
+//     const client = new Client({
+//         connectionString: "postgresql://prasadmanish467:5DBtV2xMzPYK@ep-fragrant-truth-a505vjqm.us-east-2.aws.neon.tech/testdb?sslmode=require"
+//     })
 
-    try {
-        await client.connect()
+//     try {
+//         await client.connect()
 
-        const insertQuery = "INSERT INTO addresses (user_id, city, country, street, pincode) VALUES ($1, $2, $3, $4, $5)"
-        const values = [user_id, city, country, street, pincode]
+//         const insertQuery = "INSERT INTO addresses (user_id, city, country, street, pincode) VALUES ($1, $2, $3, $4, $5)"
+//         const values = [user_id, city, country, street, pincode]
 
-        const res = await client.query(insertQuery, values)
-        console.log("insertion success: ", res)
-    } catch (err) {
-        console.log('Error while insertion', err)
-    } finally {
-        await client.end()
-    }
-}
-insertAddress('1', 'Bargarh', 'India', '13', '768028')
+//         const res = await client.query(insertQuery, values)
+//         console.log("insertion success: ", res)
+//     } catch (err) {
+//         console.log('Error while insertion', err)
+//     } finally {
+//         await client.end()
+//     }
+// }
+// insertAddress('1', 'Bargarh', 'India', '13', '768028')
+
+
+// ----------------------------
+
+// TRANSACTION IN SQL 
+
+// async function insertUserAndAddress(
+//     username: string,
+//     email: string,
+//     password: string,
+//     city: string,
+//     country: string,
+//     street: string,
+//     pincode: string
+// ) {
+//     const client = new Client({
+//         connectionString: 'postgresql://prasadmanish467:5DBtV2xMzPYK@ep-fragrant-truth-a505vjqm.us-east-2.aws.neon.tech/testdb?sslmode=require'
+//     })
+
+//     try {
+//         await client.connect()
+
+//         // start transcation 
+//         await client.query('BEGIN')
+
+//         // INSERT USER 
+//         const insertUserText = `
+//         INSERT INTO users (username, email, password)
+//         VALUES ($1, $2, $3)
+//         RETURNING id`
+
+//         const userResponse = await client.query(insertUserText, [username, email, password])
+//         const userId = userResponse.rows[0].id
+
+//         // insert address using the returned id
+//         const insertAddressText = `
+//         INSERT INTO addresses (user_id, city, country, street, pincode) VALUES ($1, $2, $3, $4, $5)`
+        
+//         await client.query(insertAddressText, [userId, city, country, street, pincode])
+
+//         // commit transaction 
+//         await client.query('COMMIT')
+        
+//         console.log('user and address successfully inserted in db')
+//     } catch(err) {
+//         // rollback the transaction on error
+//         await client.query('ROLLBACK')
+
+//         console.error('Error during transaction, rolled back', err)
+//         throw err
+//     } finally {
+//         await client.end() // close the client connection
+//     }
+// }
+// insertUserAndAddress(
+//     'rohon',
+//     'rohan@gmail.com',
+//     'rohan@123',
+//     'Bargarh',
+//     'India',
+//     '13',
+//     '768028'
+// )
+
+
+// Joins in sql
